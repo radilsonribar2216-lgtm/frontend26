@@ -1,0 +1,109 @@
+<h2 mat-dialog-title>Historia clínica</h2>
+<mat-dialog-content>
+  @if (historia(); as h) {
+    <dl class="detalle">
+      <div><dt>Mascota</dt><dd>{{ h.mascotaNombre }}</dd></div>
+      <div><dt>Cliente</dt><dd>{{ h.clienteNombre }}</dd></div>
+      <div><dt>Veterinario</dt><dd>{{ h.veterinarioNombre }}</dd></div>
+      <div><dt>Fecha y hora de la consulta</dt><dd>{{ h.fechaHora | date: 'dd/MM/yyyy HH:mm' }}</dd></div>
+      <div class="completo"><dt>Motivo de la consulta</dt><dd>{{ h.motivoConsulta }}</dd></div>
+      <div class="completo"><dt>Diagnóstico</dt><dd>{{ h.diagnostico }}</dd></div>
+      <div class="completo"><dt>Observaciones</dt><dd>{{ h.observaciones || '—' }}</dd></div>
+      <div>
+        <dt>Estado</dt>
+        <dd><span class="chip" [class]="'chip estado-' + h.estado.toLowerCase()">{{ h.estado === 'ABIERTA' ? 'Abierta' : 'Cerrada' }}</span></dd>
+      </div>
+    </dl>
+  } @else {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  <header class="encabezado" style="margin-top: 24px">
+    <h3 style="margin: 0">Histórico de anotaciones</h3>
+    @if (historia()?.estado === 'ABIERTA') {
+      <button mat-flat-button type="button" (click)="agregarAnotacion()">Agregar anotación</button>
+    }
+  </header>
+
+  <form class="filtros" [formGroup]="formFiltros" (ngSubmit)="aplicarFiltros()">
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar</mat-label>
+      <input matInput formControlName="texto" placeholder="Descripción, observación o diagnóstico" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Alcance</mat-label>
+      <mat-select formControlName="soloHistoria">
+        <mat-option value="false">Toda la mascota</mat-option>
+        <mat-option value="true">Solo esta historia</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Desde</mat-label>
+      <input matInput type="date" formControlName="fechaDesde" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hasta</mat-label>
+      <input matInput type="date" formControlName="fechaHasta" />
+    </mat-form-field>
+
+    <div class="acciones-filtro">
+      <button mat-flat-button type="submit">Filtrar</button>
+      <button mat-button type="button" (click)="limpiarFiltros()">Limpiar</button>
+    </div>
+  </form>
+
+  @if (cargando()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  <div class="tabla-contenedor">
+    <table mat-table [dataSource]="filas()" matSort matSortActive="fecha" matSortDirection="desc"
+           (matSortChange)="alOrdenar($event)">
+
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="fecha">Fecha y hora</th>
+        <td mat-cell *matCellDef="let a">{{ a.fechaHora | date: 'dd/MM/yyyy HH:mm' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="veterinario">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="veterinario">Veterinario</th>
+        <td mat-cell *matCellDef="let a">{{ a.veterinarioNombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef>Descripción</th>
+        <td mat-cell *matCellDef="let a">{{ a.descripcion }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="diagnostico">
+        <th mat-header-cell *matHeaderCellDef>Diagnóstico / evolución</th>
+        <td mat-cell *matCellDef="let a">{{ a.diagnosticoEvolucion }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let a">
+          <div class="acciones-fila">
+            <button mat-button type="button" (click)="verAnotacion(a)">Ver</button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+      <tr mat-row *matRowDef="let fila; columns: columnas"></tr>
+    </table>
+
+    @if (!cargando() && filas().length === 0) {
+      <p class="sin-datos">No hay anotaciones para los filtros seleccionados.</p>
+    }
+  </div>
+
+  <mat-paginator [length]="total()" [pageSize]="tamano()" [pageIndex]="pagina()"
+                 [pageSizeOptions]="opcionesTamano" (page)="alCambiarPagina($event)" />
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

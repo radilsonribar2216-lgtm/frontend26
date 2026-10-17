@@ -1,0 +1,110 @@
+<section class="pagina">
+  <header class="encabezado">
+    <h2>Historias clínicas</h2>
+    <button mat-flat-button type="button" (click)="nueva()">Nueva historia</button>
+  </header>
+
+  <form class="filtros" [formGroup]="formFiltros" (ngSubmit)="aplicarFiltros()">
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar</mat-label>
+      <input matInput formControlName="texto" placeholder="Mascota, cliente, motivo o diagnóstico" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="estado">
+        <mat-option value="">Todos</mat-option>
+        <mat-option value="ABIERTA">Abierta</mat-option>
+        <mat-option value="CERRADA">Cerrada</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Veterinario</mat-label>
+      <mat-select formControlName="veterinarioId">
+        <mat-option value="">Todos</mat-option>
+        @for (v of veterinarios(); track v.id) {
+          <mat-option [value]="v.id">{{ v.nombreCompleto }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Desde</mat-label>
+      <input matInput type="date" formControlName="fechaDesde" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hasta</mat-label>
+      <input matInput type="date" formControlName="fechaHasta" />
+    </mat-form-field>
+
+    <div class="acciones-filtro">
+      <button mat-flat-button type="submit">Filtrar</button>
+      <button mat-button type="button" (click)="limpiarFiltros()">Limpiar</button>
+    </div>
+  </form>
+
+  @if (cargando()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  <div class="tabla-contenedor">
+    <table mat-table [dataSource]="filas()" matSort matSortActive="fecha" matSortDirection="desc"
+           (matSortChange)="alOrdenar($event)">
+
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="fecha">Fecha</th>
+        <td mat-cell *matCellDef="let h">{{ h.fechaHora | date: 'dd/MM/yyyy HH:mm' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="mascota">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="mascota">Mascota</th>
+        <td mat-cell *matCellDef="let h">{{ h.mascotaNombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="cliente">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="cliente">Cliente</th>
+        <td mat-cell *matCellDef="let h">{{ h.clienteNombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="veterinario">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="veterinario">Veterinario</th>
+        <td mat-cell *matCellDef="let h">{{ h.veterinarioNombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="motivo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="motivo">Motivo de consulta</th>
+        <td mat-cell *matCellDef="let h">{{ h.motivoConsulta }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="estado">Estado</th>
+        <td mat-cell *matCellDef="let h">
+          <span class="chip" [class]="'chip estado-' + h.estado.toLowerCase()">
+            {{ h.estado === 'ABIERTA' ? 'Abierta' : 'Cerrada' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let h">
+          <div class="acciones-fila">
+            <button mat-button type="button" (click)="ver(h)">Ver</button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+      <tr mat-row *matRowDef="let fila; columns: columnas"></tr>
+    </table>
+
+    @if (!cargando() && filas().length === 0) {
+      <p class="sin-datos">No hay historias clínicas que coincidan con los filtros.</p>
+    }
+  </div>
+
+  <mat-paginator [length]="total()" [pageSize]="tamano()" [pageIndex]="pagina()"
+                 [pageSizeOptions]="opcionesTamano" (page)="alCambiarPagina($event)" showFirstLastButtons />
+</section>

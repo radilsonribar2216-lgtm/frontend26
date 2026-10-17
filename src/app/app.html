@@ -1,0 +1,11 @@
+<mat-toolbar color="primary" class="barra">
+  <span class="marca">Clínica Veterinaria</span>
+  <nav>
+    @for (enlace of enlaces; track enlace.ruta) {
+      <a mat-button [routerLink]="enlace.ruta" routerLinkActive="activo">{{ enlace.texto }}</a>
+    }
+  </nav>
+</mat-toolbar>
+<main>
+  <router-outlet />
+</main>
