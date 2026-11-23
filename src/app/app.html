@@ -1,11 +1,9 @@
+@if (usuario()) {
 <mat-toolbar color="primary" class="barra">
-  <span class="marca">Clínica Veterinaria</span>
-  <nav>
-    @for (enlace of enlaces; track enlace.ruta) {
-      <a mat-button [routerLink]="enlace.ruta" routerLinkActive="activo">{{ enlace.texto }}</a>
-    }
-  </nav>
+ <span class="marca">Clínica Veterinaria</span>
+ <nav>@for(enlace of enlaces();track enlace.ruta){<a mat-button [routerLink]="enlace.ruta" routerLinkActive="activo">{{enlace.texto}}</a>}</nav>
+ <span class="usuario">{{usuario()?.nombre}} · {{usuario()?.rol}}</span>
+ <button mat-button type="button" (click)="salir()">Cerrar sesión</button>
 </mat-toolbar>
-<main>
-  <router-outlet />
-</main>
+}
+<main><router-outlet /></main>
