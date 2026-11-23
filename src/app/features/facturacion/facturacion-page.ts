@@ -30,7 +30,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
    <input name="referencia" [(ngModel)]="pago.referencia" placeholder="Referencia">
    <button type="submit">Guardar pago</button></form>}
   @if(detalle()){<h3>Detalle {{detalle().numero}}</h3><p>Cliente: {{detalle().clienteNombre}} · Total: {{detalle().total | currency:'COP':'symbol-narrow':'1.0-0'}} · Pagado: {{detalle().totalPagado | currency:'COP':'symbol-narrow':'1.0-0'}}</p>
-   <ul>@for(d of detalle().detalles;track d.id){<li>{{d.concepto}} — {{d.cantidad}} × {{d.precio_unitario | currency:'COP':'symbol-narrow':'1.0-0'}} = {{d.total_linea | currency:'COP':'symbol-narrow':'1.0-0'}}</li>}</ul></section>}
+   <ul>@for(d of detalle().detalles;track d.id){<li>{{d.concepto}} — {{d.cantidad}} × {{d.precio_unitario | currency:'COP':'symbol-narrow':'1.0-0'}} = {{d.total_linea | currency:'COP':'symbol-narrow':'1.0-0'}}</li>}</ul>}
  </section>`
 })
 export class FacturacionPage {
