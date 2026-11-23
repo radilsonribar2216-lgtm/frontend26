@@ -19,5 +19,7 @@ export class App {
     { ruta: '/citas', texto: 'Citas' },
     { ruta: '/historias', texto: 'Historias clínicas' },
     { ruta: '/formulas', texto: 'Fórmulas médicas' },
+    { ruta: '/inventario', texto: 'Inventario' },
+    { ruta: '/facturacion', texto: 'Facturación' },
   ];
 }
