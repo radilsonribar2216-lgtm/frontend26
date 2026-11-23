@@ -19,8 +19,8 @@ import { CurrencyPipe } from '@angular/common';
       <button type="submit">Crear producto</button>
     </form>
     <p>{{ mensaje() }}</p>
-    <div class="tabla-contenedor"><table><thead><tr><th>Código</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Existencia</th><th>Mínimo</th><th>Acción</th></tr></thead>
-    <tbody>@for (p of productos(); track p.id) {<tr><td>{{p.codigo}}</td><td>{{p.nombre}}</td><td>{{p.categoria}}</td><td>{{p.precio_venta | currency:'COP':'symbol-narrow':'1.0-0'}}</td><td>{{p.existencia}}</td><td>{{p.existencia_minima}}</td><td><button type="button" (click)="seleccionar(p)">Lote / movimiento</button></td></tr>}</tbody></table></div>
+    <div class="tabla-contenedor"><table><thead><tr><th>ID</th><th>Código</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Existencia</th><th>Mínimo</th><th>Acción</th></tr></thead>
+    <tbody>@for (p of productos(); track p.id) {<tr><td>{{p.id}}</td><td>{{p.codigo}}</td><td>{{p.nombre}}</td><td>{{p.categoria}}</td><td>{{p.precio_venta | currency:'COP':'symbol-narrow':'1.0-0'}}</td><td>{{p.existencia}}</td><td>{{p.existencia_minima}}</td><td><button type="button" (click)="seleccionar(p)">Lote / movimiento</button></td></tr>}</tbody></table></div>
     @if (seleccionado()) {
       <h3>{{seleccionado().nombre}} · Registrar lote o movimiento</h3>
       <form class="filtros" (ngSubmit)="registrarLote()">
@@ -33,7 +33,7 @@ import { CurrencyPipe } from '@angular/common';
       </form>
       <form class="filtros" (ngSubmit)="movimiento()">
         <select name="tipo" [(ngModel)]="mov.tipo"><option value="ENTRADA">Entrada</option><option value="SALIDA">Salida</option></select>
-        <input name="cantidad" [(ngModel)]="mov.cantidad" type="number" min="1" placeholder="Cantidad" required>
+        <input name="loteId" [(ngModel)]="mov.loteId" type="number" min="1" placeholder="ID del lote" required>\n        <input name="cantidad" [(ngModel)]="mov.cantidad" type="number" min="1" placeholder="Cantidad" required>
         <input name="motivo" [(ngModel)]="mov.motivo" placeholder="Motivo" required>
         <button type="submit">Guardar movimiento</button>
       </form>
@@ -47,7 +47,7 @@ export class InventarioPage {
   seleccionado = signal<any>(null);
   nuevo:any = {codigo:'',nombre:'',categoria:'MEDICAMENTO',precioVenta:0,existenciaMinima:0};
   lote:any = {numeroLote:'',registroInvima:'',fechaVencimiento:'',cantidad:1,costoUnitario:0};
-  mov:any = {tipo:'ENTRADA',cantidad:1,motivo:''};
+  mov:any = {tipo:'SALIDA',loteId:null,cantidad:1,motivo:''};
   private base = 'http://localhost:8080/clinica/v1/inventario';
   constructor(){ this.cargar(); }
   cargar(){this.http.get<any[]>(this.base+'/productos').subscribe({next:x=>this.productos.set(x),error:()=>this.mensaje.set('No se pudo cargar el inventario. Verifique el servidor y la base de datos.')});}
