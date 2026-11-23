@@ -11,7 +11,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
   <form class="filtros" (ngSubmit)="crear()">
    <input name="clienteId" [(ngModel)]="nueva.clienteId" type="number" min="1" placeholder="ID del cliente" required>
    <input name="mascotaId" [(ngModel)]="nueva.mascotaId" type="number" min="1" placeholder="ID mascota (opcional)">
-   <input name="concepto" [(ngModel)]="linea.concepto" placeholder="Concepto del servicio/producto" required>
+   <input name="concepto" [(ngModel)]="linea.concepto" placeholder="Concepto del servicio/producto" required>\n   <input name="productoId" [(ngModel)]="linea.productoId" type="number" min="1" placeholder="ID producto (opcional; descuenta stock)">
    <input name="cantidad" [(ngModel)]="linea.cantidad" type="number" min="0.01" step="0.01" placeholder="Cantidad" required>
    <input name="precio" [(ngModel)]="linea.precioUnitario" type="number" min="0" step="0.01" placeholder="Precio unitario" required>
    <input name="descuento" [(ngModel)]="nueva.descuento" type="number" min="0" placeholder="Descuento total">
