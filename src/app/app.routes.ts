@@ -20,5 +20,7 @@ export const routes: Routes = [
     title: 'Fórmulas médicas',
     loadComponent: () => import('./features/formulas/formulas-lista').then((m) => m.FormulasLista),
   },
+  { path: 'inventario', title: 'Inventario', loadComponent: () => import('./features/inventario/inventario-page').then(m => m.InventarioPage) },
+  { path: 'facturacion', title: 'Facturación', loadComponent: () => import('./features/facturacion/facturacion-page').then(m => m.FacturacionPage) },
   { path: '**', redirectTo: 'citas' },
 ];
