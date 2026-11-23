@@ -1,11 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-inventario',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CurrencyPipe],
   template: `
   <section class="pagina">
     <header class="encabezado"><h2>Inventario</h2><button type="button" (click)="cargar()">Actualizar</button></header>
