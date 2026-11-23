@@ -22,5 +22,6 @@ export const routes: Routes = [
   },
   { path: 'inventario', title: 'Inventario', loadComponent: () => import('./features/inventario/inventario-page').then(m => m.InventarioPage) },
   { path: 'facturacion', title: 'Facturación', loadComponent: () => import('./features/facturacion/facturacion-page').then(m => m.FacturacionPage) },
+  { path: 'reportes', title: 'Reportes', loadComponent: () => import('./features/reportes/reportes-page').then(m => m.ReportesPage) },
   { path: '**', redirectTo: 'citas' },
 ];
