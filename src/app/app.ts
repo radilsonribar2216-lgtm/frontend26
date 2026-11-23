@@ -21,5 +21,6 @@ export class App {
     { ruta: '/formulas', texto: 'Fórmulas médicas' },
     { ruta: '/inventario', texto: 'Inventario' },
     { ruta: '/facturacion', texto: 'Facturación' },
+    { ruta: '/reportes', texto: 'Reportes' },
   ];
 }
